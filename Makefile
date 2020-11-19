@@ -1,4 +1,4 @@
-.PHONY: prerequisites install_deps run ping pid kill clean
+.PHONY: list_targets prerequisites install_deps run ping pid kill clean
 
 list_targets:
 	@echo 'Make targets:'
