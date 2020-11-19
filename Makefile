@@ -6,28 +6,28 @@ list_targets:
 	  'prerequisites  (installs gcc,binutils,coreutils,openssl,nim on Debian/Ubuntu)' \
 	  'install_deps   (nimble install --depsOnly --verbose)' \
 	  'jester_rest    (nimble -d:useStdLib -d:release build --verbose)' \
-	  'run            (./jester_rest  1> out.log  2> err.log  &)' \
+	  'run            (./jester_rest 1> out.log 2> err.log &)' \
+	  'ping           (hits the ping endpoint using curl)' \
 	  'pid            (gets PID of the running process)' \
 	  'kill           (kills the running process)' \
-	  'ping           (hits the ping endpoint using curl)' \
 	  'clean          (deletes executable and log files)'
 
-run: jester_rest
-	./jester_rest 1>out.log 2>err.log &
-
-jester_rest: install_deps
-	nimble -d:useStdLib -d:release build --verbose
-
-install_deps:
-	nimble install --depsOnly --verbose
-
 prerequisites:
-	sudo apt install binutils coreutils gcc openssl
+	sudo apt install -y binutils coreutils gcc openssl
 	snap install nim-lang --classic
 	echo 'PATH="/snap/nim-lang/current/bin:${PATH}"' >> ~/.bashrc
 	@echo ''
 	@echo 'To refresh your PATH variable, use command:'
 	@echo '    . ~/.bashrc'
+
+install_deps:
+	nimble install --depsOnly --verbose
+
+jester_rest: install_deps
+	nimble -d:useStdLib -d:release build --verbose
+
+run: jester_rest
+	./jester_rest 1>out.log 2>err.log &
 
 .ONESHELL:
 ping:
